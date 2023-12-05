@@ -2,6 +2,7 @@ import pandas as pd
 from espn_api.football import League
 
 
+# Retrieves necessary data for each team and returns a dictionary with said data
 def format_data(team, year):
     num_games = team.wins + team.losses + team.ties
     data = {
@@ -28,6 +29,7 @@ if __name__ == "__main__":
     swid = '{AA3E68CA-5D8E-46B6-BD21-3CA1A769BC3A}'
     years = [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022]
 
+    # Creates a DataFrame containing the final standings for the historical seasons
     yearly_data = []
     for year in years:
         league = League(league_id=401991, year=year, espn_s2=espn_s2, swid=swid)
@@ -36,4 +38,5 @@ if __name__ == "__main__":
             yearly_data.append(data)
     pdf = pd.DataFrame(yearly_data)
     
+    # Exports the historical records to a CSV
     pdf.to_csv('data/historical_records.csv')
