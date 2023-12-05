@@ -37,6 +37,6 @@ if __name__ == "__main__":
             data = format_data(team, year)
             yearly_data.append(data)
     pdf = pd.DataFrame(yearly_data)
-    
+
     # Exports the historical records to a CSV
-    pdf.to_csv('data/historical_records.csv')
+    pdf.to_csv('data/historical_records.csv', index=False)
