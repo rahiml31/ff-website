@@ -12,7 +12,12 @@ import streamlit as st
 # Depicts the standings, power rankings, and current weekly scorebard for the current season
 def current():
     st.write('# current')
-    
+    # add a flag for if in playoffs.
+    # if not in playoffs: trigger regular_season()
+    #   contains bump chart for power rankings, standings, scorebard and more.
+    #   add ability to select a team and highlight it on bump chart and on the other stuff too
+    # if in playoffs: trigger playoffs()
+    #   has matchups and a bracket showcasing path to finals
 
 
 # Depicts the overall statistics for players who have played in the League
