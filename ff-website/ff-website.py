@@ -18,6 +18,9 @@ def current():
     #   add ability to select a team and highlight it on bump chart and on the other stuff too
     # if in playoffs: trigger playoffs()
     #   has matchups and a bracket showcasing path to finals
+    # bump chart - https://stackoverflow.com/questions/68095438/how-to-make-a-bump-chart
+    # https://altair.streamlit.app/Bump_Chart
+    pass
 
 
 # Depicts the overall statistics for players who have played in the League
