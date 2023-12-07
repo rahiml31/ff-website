@@ -9,6 +9,7 @@ import pandas as pd
 import streamlit as st
 import json
 from espn_api.football import League
+import altair as alt
 
 
 # Depicts the standings, power rankings, and current weekly scorebard for the current season
@@ -26,20 +27,34 @@ def current():
     last_regular_season_week = league.settings.reg_season_count
     current_week = league.current_week
     if current_week > last_regular_season_week:
-        playoffs()
+        playoffs(league)
     else:
-        regular_season()
+        regular_season(league)
 
 
 # Depicts the Playoff Bracket and percentage chance of winning the championship
-def playoffs():
+def playoffs(league):
     st.write('# playoffs')
 
 
-# Depics the current week's scoreboard/matchups and the power rankings for this season
-def regular_season():
+# Depicts the current week's scoreboard/matchups and the power rankings for this season
+def regular_season(league):
     st.write('# regular season')
+    power_ranks_df = get_power_rankings(league)
+    st.table(power_ranks_df)
 
+# Gets the power rankings for the entire season in a Data Frame
+def get_power_rankings(league):
+    cw = league.current_week
+    teams = [t.team_name for t in league.teams]
+    main = pd.DataFrame(teams, columns=['team_name'])
+    for week in range(1, cw):
+        pw0 = league.power_rankings(week=week)
+        pw1 = [team[1].team_name for team in pw0]
+        pw = tuple(zip(pw1, range(1, len(pw1) + 1)))
+        df = pd.DataFrame(pw, columns=['team_name', 'week_' + str(week)])
+        main = main.merge(df, on='team_name')
+    return main
 
 # Depicts the overall statistics for players who have played in the League
 def historical():
