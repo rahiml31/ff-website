@@ -32,7 +32,7 @@ if __name__ == "__main__":
     # Creates a DataFrame containing the final standings for the historical seasons
     yearly_data = []
     for year in years:
-        league = League(league_id=401991, year=year, espn_s2=secrets['espn_s2'], swid=secrets['swid'])
+        league = League(league_id=secrets['league_id'], year=year, espn_s2=secrets['espn_s2'], swid=secrets['swid'])
         for team in league.standings():
             data = format_data(team, year)
             yearly_data.append(data)

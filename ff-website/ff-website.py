@@ -7,6 +7,8 @@
 
 import pandas as pd
 import streamlit as st
+import json
+from espn_api.football import League
 
 
 # Depicts the standings, power rankings, and current weekly scorebard for the current season
@@ -20,7 +22,8 @@ def current():
     #   has matchups and a bracket showcasing path to finals
     # bump chart - https://stackoverflow.com/questions/68095438/how-to-make-a-bump-chart
     # https://altair.streamlit.app/Bump_Chart
-    pass
+    secrets = json.load(open('config/secrets.json'))
+    league = League(league_id=secrets['league_id'], year=2023, espn_s2=secrets['espn_s2'], swid=secrets['swid'])
 
 
 # Depicts the overall statistics for players who have played in the League
