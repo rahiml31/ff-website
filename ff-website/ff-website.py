@@ -13,7 +13,6 @@ from espn_api.football import League
 
 # Depicts the standings, power rankings, and current weekly scorebard for the current season
 def current():
-    st.write('# current')
     # add a flag for if in playoffs.
     # if not in playoffs: trigger regular_season()
     #   contains bump chart for power rankings, standings, scorebard and more.
@@ -24,11 +23,27 @@ def current():
     # https://altair.streamlit.app/Bump_Chart
     secrets = json.load(open('config/secrets.json'))
     league = League(league_id=secrets['league_id'], year=2023, espn_s2=secrets['espn_s2'], swid=secrets['swid'])
+    last_regular_season_week = league.settings.reg_season_count
+    current_week = league.current_week
+    if current_week > last_regular_season_week:
+        playoffs()
+    else:
+        regular_season()
+
+
+# Depicts the Playoff Bracket and percentage chance of winning the championship
+def playoffs():
+    st.write('# playoffs')
+
+
+# Depics the current week's scoreboard/matchups and the power rankings for this season
+def regular_season():
+    st.write('# regular season')
 
 
 # Depicts the overall statistics for players who have played in the League
 def historical():
-    hist = pd.read_csv('data/historical_records.csv')
+    hist = pd.read_csv('config/historical_records.csv')
     years_played = hist.groupby('Owner')['Year'].count().reset_index().sort_values(by=['Year', 'Owner'], ascending=[False, True]).reset_index(drop=True)
     owners = years_played.Owner.to_list()
     data = []
