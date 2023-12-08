@@ -39,24 +39,28 @@ def playoffs(league):
 
 # Depicts the current week's scoreboard/matchups and the power rankings for this season
 def regular_season(league):
-    st.write('# regular season')
     power_ranks_df = get_power_rankings(league)
-    st.table(power_ranks_df)
-    
+    pw_chart = alt.Chart(power_ranks_df).mark_line(point=alt.OverlayMarkDef(filled=False, fill='black')).encode(
+        x=alt.X('week:O', title='Week', axis=alt.Axis(labelAngle=0)),
+        y=alt.Y('rank:O', title='Rank'),
+        color=alt.Color('team_name', title='Team Name')
+    ).properties(
+        title="Season's Power Rankings                                                                               " + 
+        "                                                                            Current Week: {}".format(league.current_week),
+        width=1000,
+        height=500,
+    )
+    st.altair_chart(pw_chart)
 
 # Gets the power rankings for the entire season in a Data Frame
 def get_power_rankings(league):
     cw = league.current_week
-    teams = [t.team_name for t in league.teams]
-    # week, team name, rank
-    #main = pd.DataFrame(teams, columns=['team_name'])
     main = pd.DataFrame()
     for week in range(1, cw):
         pw0 = league.power_rankings(week=week)
         pw1 = [team[1].team_name for team in pw0]
         pw = tuple(zip([week] * len(pw1), pw1, range(1, len(pw1) + 1)))
         df = pd.DataFrame(pw, columns=['week', 'team_name', 'rank'])
-        #main = main.merge(df, on='team_name')
         main = pd.concat([main, df]).reset_index(drop=True)
     return main
 
