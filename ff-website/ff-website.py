@@ -1,10 +1,3 @@
-# Makes the website
-# Has 2 tabs: current, historical
-# current showcases the current season stats (standings, power rankings etc.)
-# make power rankings into a bump chart
-# historical showcases the overall records for all players of the league
-# have a trophy for number of champs etc.
-
 import pandas as pd
 import streamlit as st
 import json
@@ -14,22 +7,15 @@ import altair as alt
 
 # Depicts the standings, power rankings, and current weekly scorebard for the current season
 def current():
-    # add a flag for if in playoffs.
-    # if not in playoffs: trigger regular_season()
-    #   contains bump chart for power rankings, standings, scorebard and more.
-    #   add ability to select a team and highlight it on bump chart and on the other stuff too
-    # if in playoffs: trigger playoffs()
-    #   has matchups and a bracket showcasing path to finals
-    # bump chart - https://stackoverflow.com/questions/68095438/how-to-make-a-bump-chart
-    # https://altair.streamlit.app/Bump_Chart
     secrets = json.load(open('config/secrets.json'))
     league = League(league_id=secrets['league_id'], year=2023, espn_s2=secrets['espn_s2'], swid=secrets['swid'])
     last_regular_season_week = league.settings.reg_season_count
     current_week = league.current_week
-    if current_week > last_regular_season_week:
-        playoffs(league)
-    else:
-        regular_season(league)
+    regular_season(league)
+    #if current_week > last_regular_season_week:
+    #    playoffs(league)
+    #else:
+    #    regular_season(league)
 
 
 # Depicts the Playoff Bracket and percentage chance of winning the championship
@@ -52,6 +38,7 @@ def regular_season(league):
     )
     st.altair_chart(pw_chart)
 
+
 # Gets the power rankings for the entire season in a Data Frame
 def get_power_rankings(league):
     cw = league.current_week
@@ -63,6 +50,7 @@ def get_power_rankings(league):
         df = pd.DataFrame(pw, columns=['week', 'team_name', 'rank'])
         main = pd.concat([main, df]).reset_index(drop=True)
     return main
+
 
 # Depicts the overall statistics for players who have played in the League
 def historical():
